@@ -1,0 +1,26 @@
+name: ramvde
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pytorch=1.12.*
+  - cudatoolkit=11.6
+  - torchvision
+  - torchdata
+  - pytorch-lightning=1.*
+  - kornia
+  - imageio
+  - scipy
+
+  # dev
+  - ipython
+  - ipykernel
+  - black
+
+  - pip
+  - pip:
+    - pipe
+    - webdataset
+    - pytest
