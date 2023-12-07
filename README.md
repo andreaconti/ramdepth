@@ -18,7 +18,7 @@
 </div>
 </p>
 
-![](https://github.com/andreaconti/ramdepth/blob/master/media/teaser.png)
+![](https://github.com/andreaconti/ramdepth/blob/main/media/teaser.png)
 
 Multi-View 3D reconstruction techniques process a set of source views and a reference view to yield an estimated depth map for the latter. Unluckily, state-of-the-art frameworks
 
@@ -55,4 +55,4 @@ $ conda env create -f environment.yml  # use mamba if conda is too slow
 $ conda activate ramdepth
 ```
 
-Then you can run the [evaluate.ipynb](https://github.com/andreaconti/ramdepth/blob/master/evaluate.ipynb) to select the dataset and pre-trained model you want to test. Results may be slightly different with respect to the results in the main paper due to small differences in dataloaders and framework due to the packaging process.
+Then you can run the [evaluate.ipynb](https://github.com/andreaconti/ramdepth/blob/main/evaluate.ipynb) to select the dataset and pre-trained model you want to test. Results may be slightly different with respect to the results in the main paper due to small differences in dataloaders and framework due to the packaging process.
