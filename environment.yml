@@ -1,18 +1,21 @@
-name: ramvde
+name: ramdepth
 channels:
   - pytorch
   - conda-forge
+  - nvidia
   - defaults
 dependencies:
   - python=3.10
-  - pytorch=1.12.*
-  - cudatoolkit=11.6
-  - torchvision
+  - pytorch=1.13.1
+  - pytorch-cuda=11.6
+  - torchvision=0.14.1
   - torchdata
   - pytorch-lightning=1.*
   - kornia
   - imageio
   - scipy
+  - matplotlib
+  - pandas
 
   # dev
   - ipython
@@ -22,5 +25,7 @@ dependencies:
   - pip
   - pip:
     - pipe
+    - cryptography
     - webdataset
+    - plyfile
     - pytest
