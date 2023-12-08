@@ -2,12 +2,18 @@ from pathlib import Path
 import numpy as np
 import sys
 import re
+from zipfile import ZipFile
+import shutil
+import os
+import tempfile
+import torch
 
 __all__ = [
     "save_pfm",
     "read_pfm",
     "read_pfm_depth",
     "read_cam_file",
+    "unzip",
 ]
 
 
@@ -141,3 +147,15 @@ def read_pfm_depth(path: str | Path) -> np.ndarray:
     """
     depth = np.array(read_pfm(str(path))[0], dtype=np.float32)
     return depth
+
+
+def unzip(path: str | Path, out: str | Path):
+    with ZipFile(path) as file:
+        file.extractall(out)
+
+
+def download_unzip(url: str, out: str | Path, progress: bool = True):
+    ftemp = os.path.join(tempfile.mkdtemp(prefix="download"), "temp_file")
+    torch.hub.download_url_to_file(url, ftemp, progress=progress)
+    unzip(ftemp, out)
+    shutil.rmtree(os.path.dirname(ftemp))

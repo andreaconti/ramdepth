@@ -5,7 +5,6 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parents[1]))
 
 from dataset import (
-    DTUDataModule,
     BlendedMVSDataModule,
     TartanairDataModule,
     UnrealStereo4kDataModule,
@@ -13,11 +12,10 @@ from dataset import (
 
 
 @pytest.mark.parametrize(
-    "dataset", ["dtu", "blendedmvs", "tartanair", "unrealstereo4k"]
+    "dataset", ["blendedmvs", "tartanair", "unrealstereo4k"]
 )
 def test_load_data(dataset):
     dm = {
-        "dtu": DTUDataModule,
         "blendedmvs": BlendedMVSDataModule,
         "tartanair": TartanairDataModule,
         "unrealstereo4k": UnrealStereo4kDataModule,

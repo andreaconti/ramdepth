@@ -1,12 +1,27 @@
 import torch
 from torch import Tensor
 
-__all__ = ["mae", "rmse", "perc_l1_upper_thresh" "compute_metrics"]
+__all__ = [
+    "mae",
+    "rmse",
+    "perc_l1_upper_thresh",
+    "compute_metrics",
+    "depth_to_disp",
+]
 
 
-def compute_metrics(pred: Tensor, gt: Tensor):
-    mask = gt > 0
-    pred, gt = pred[mask], gt[mask]
+def depth_to_disp(depth, intrins1, pose1, pose2, min_depth=0.1):
+    mask = depth > 0
+    b = torch.abs(pose1[..., 0, -1] - pose2[..., 0, -1])
+    f = intrins1[..., 0, 0]
+    disp = torch.zeros_like(depth)
+    disp[mask] = f * b / depth[mask].clip(min=min_depth)
+    return disp
+
+
+def compute_metrics(pred: Tensor, gt: Tensor, mask: Tensor | None):
+    if mask is not None:
+        pred, gt = pred[mask], gt[mask]
 
     return {
         "mae": mae(pred, gt),

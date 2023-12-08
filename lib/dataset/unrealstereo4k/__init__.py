@@ -17,7 +17,7 @@ class UnrealStereo4kDataModule(LightningDataModule):
         filter_scans: Callable[[str, str], bool] | None = None,
         stereo_as_prevs: bool = True,
         scan_order: Literal[None, "pose", "pcd"] = "pcd",
-        remove_sky: bool = False,
+        remove_sky: bool = True,
         # common
         batch_size: int = 1,
         eval_transform: Callable[[dict], dict] | None = None,

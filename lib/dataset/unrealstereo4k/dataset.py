@@ -22,8 +22,8 @@ class UnrealStereo4kDataset(Dataset):
         load_prevs: int | None = None,
         filter_scans: Callable[[str, str], bool] | None = None,
         stereo_as_prevs: bool = False,
-        remove_sky: bool = False,
-        scan_order: Literal[None, "pose"] = "pose",
+        remove_sky: bool = True,
+        scan_order: Literal[None, "pose", "pcd"] = "pcd",
         transform: Callable[[dict], dict] = lambda x: x,
     ):
         super().__init__()
