@@ -1,7 +1,7 @@
 from .dataset import UnrealStereo4kDataset
 from pytorch_lightning import LightningDataModule
 from pathlib import Path
-from typing import Callable, Literal
+from typing import Callable
 from multiprocessing import cpu_count
 from torch.utils.data import DataLoader
 
@@ -16,7 +16,6 @@ class UnrealStereo4kDataModule(LightningDataModule):
         load_prevs: int | None = 0,
         filter_scans: Callable[[str, str], bool] | None = None,
         stereo_as_prevs: bool = True,
-        scan_order: Literal[None, "pose", "pcd"] = "pcd",
         remove_sky: bool = True,
         # common
         batch_size: int = 1,
@@ -31,7 +30,6 @@ class UnrealStereo4kDataModule(LightningDataModule):
         self.eval_transform = eval_transform
         self.num_workers = num_workers
         self.stereo_as_prevs = stereo_as_prevs
-        self.scan_order = scan_order
         self.remove_sky = remove_sky
 
     def prepare_data(self) -> None:
@@ -46,7 +44,6 @@ class UnrealStereo4kDataModule(LightningDataModule):
             stereo_as_prevs=self.stereo_as_prevs,
             filter_scans=self.filter_scans,
             remove_sky=self.remove_sky,
-            scan_order=self.scan_order,
             transform=self.eval_transform if self.eval_transform else lambda x: x,
         )
 

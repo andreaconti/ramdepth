@@ -23,7 +23,6 @@ class UnrealStereo4kDataset(Dataset):
         filter_scans: Callable[[str, str], bool] | None = None,
         stereo_as_prevs: bool = False,
         remove_sky: bool = True,
-        scan_order: Literal[None, "pose", "pcd"] = "pcd",
         transform: Callable[[dict], dict] = lambda x: x,
     ):
         super().__init__()
@@ -35,7 +34,6 @@ class UnrealStereo4kDataset(Dataset):
         self.transform = transform
         self.stereo_as_prevs = stereo_as_prevs
         self.remove_sky = remove_sky
-        self.scan_order = scan_order
 
         # load split
         with open(
@@ -53,34 +51,23 @@ class UnrealStereo4kDataset(Dataset):
                 self.samples | filter(lambda p: filter_scans(split, p[0]))
             )
 
-        # order scans
-        if self.scan_order is None:
-            # default order
-            self.order = {
-                scan: [idx for s, idx in self.samples if s == scan]
-                for scan in set(s[0] for s in self.samples)
-            }
-        else:
-            # ordering relying on file order
-            with open(
-                Path(__file__).parent.parent
-                / f"_resources/unrealstereo_order_{self.scan_order}.pkl",
-                "rb",
-            ) as order_file:
-                self.order = pickle.load(order_file)
-                new_samples = []
-                for scan in set(s[0] for s in self.samples):
-                    scan_samples = list(
-                        self.samples
-                        | filter(lambda s: s[0] == scan)
-                        | map(lambda s: s[1])
-                    )
-                    new_samples.extend(
-                        self.order[scan]
-                        | filter(lambda s: s in scan_samples)
-                        | map(lambda s: (scan, s))
-                    )
-                self.samples = new_samples
+        # ordering relying on file order
+        with open(
+            Path(__file__).parent.parent / f"_resources/unrealstereo_order_pcd.pkl",
+            "rb",
+        ) as order_file:
+            self.order = pickle.load(order_file)
+            new_samples = []
+            for scan in set(s[0] for s in self.samples):
+                scan_samples = list(
+                    self.samples | filter(lambda s: s[0] == scan) | map(lambda s: s[1])
+                )
+                new_samples.extend(
+                    self.order[scan]
+                    | filter(lambda s: s in scan_samples)
+                    | map(lambda s: (scan, s))
+                )
+            self.samples = new_samples
 
         # stereo as prevs
         self.order = {
@@ -165,8 +152,14 @@ class UnrealStereo4kDataset(Dataset):
     def _load_single(self, seq, idx, view="0", end=""):
         root = self.root / f"{seq:0>5}"
         other_view = "0" if view == "1" else "1"
+
+        try:
+            img = self._load_rgb(root / f"Image{view}/{idx:0>5}.png")
+        except FileNotFoundError:
+            img = self._load_rgb(root / f"Image{view}/{idx:0>5}.jpg")
+
         out = {
-            "image": (img := self._load_rgb(root / f"Image{view}/{idx:0>5}.png")),
+            "image": img,
             "intrinsics": (intr := self._synth_intrins(img)),
             "position": (
                 pos := self._load_extr(root / f"Extrinsics{view}/{idx:0>5}.txt")
