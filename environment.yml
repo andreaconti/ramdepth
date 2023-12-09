@@ -27,5 +27,6 @@ dependencies:
     - pipe
     - cryptography
     - webdataset
+    - python-dotenv
     - plyfile
     - pytest

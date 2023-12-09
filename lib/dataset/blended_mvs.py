@@ -3,16 +3,21 @@ To load the BlendedMVS dataset
 """
 
 from typing import Callable, Literal
+import torch
 from torch import Tensor
 from multiprocessing import cpu_count
 import torchdata.datapipes as dp
 from torch.utils.data import DataLoader
 from PIL import Image
+import shutil
 import os
+import tempfile
 import numpy as np
 from pathlib import Path
 from pytorch_lightning import LightningDataModule
 from .utils import read_pfm_depth, read_cam_file
+from .utils._download import github_download_unzip_assets, root_data
+from zipfile import ZipFile
 
 # api
 
@@ -23,7 +28,7 @@ class BlendedMVSDataModule(LightningDataModule):
     def __init__(
         self,
         # dataset specific
-        root: Path | str = ".data/blended-mvs",
+        root: Path | str = root_data("blended-mvs"),
         filter_scans: Callable[[str, str], bool] | None = None,
         load_prevs: int = 0,
         # common
@@ -40,8 +45,15 @@ class BlendedMVSDataModule(LightningDataModule):
         self.num_workers = num_workers
 
     def prepare_data(self):
-        # TODO: prepare automatic download of data
-        pass
+        root = Path(self.root)
+        root.mkdir(exist_ok=True, parents=True)
+        files = [f.name for f in root.iterdir()]
+        for scan in test_scans():
+            if scan not in files:
+                github_download_unzip_assets(
+                    "andreaconti", "ramdepth", ["139715953"], root
+                )
+                break
 
     def test_dataloader(self):
         return load_blended_mvs(

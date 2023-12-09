@@ -7,6 +7,7 @@ from multiprocessing import cpu_count
 from torch.utils.data import DataLoader
 from . import _webdataset_ext
 from pytorch_lightning import LightningDataModule
+from .utils._download import github_download_unzip_assets, root_data
 import imageio.v3 as imageio
 import json
 import re
@@ -15,7 +16,7 @@ import re
 class TartanairDataModule(LightningDataModule):
     def __init__(
         self,
-        root: str | Path = ".data/tartanair",
+        root: str | Path = root_data("tartanair"),
         # dataset specific
         load_prevs: int = 0,
         filter_trajectories: list[str] | None = None,
@@ -60,8 +61,22 @@ class TartanairDataModule(LightningDataModule):
             return [traj for traj in self.filter_trajectories if traj in used_trajs]
 
     def prepare_data(self):
-        # TODO: implement automatic download of the test data split
-        pass
+        root = Path(self.root)
+        root.mkdir(exist_ok=True, parents=True)
+        files = [f.name for f in root.iterdir()]
+
+        with open(Path(__file__).parent / f"_resources/tartanair_test.json", "rt") as f:
+            test_scans = [s + ".tar" for s in json.load(f)]
+
+        for scan in test_scans:
+            if scan not in files:
+                github_download_unzip_assets(
+                    "andreaconti",
+                    "ramdepth",
+                    ["139715957", "139715955", "139715954"],
+                    root,
+                )
+                break
 
     def setup(self, stage: Literal["test"] | None = None):
         if stage not in ["test", None]:

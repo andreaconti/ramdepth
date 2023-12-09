@@ -3,6 +3,7 @@ from pytorch_lightning import LightningDataModule
 from pathlib import Path
 from typing import Callable
 from multiprocessing import cpu_count
+from ..utils._download import github_download_unzip_assets, root_data
 from torch.utils.data import DataLoader
 
 __all__ = ["UnrealStereo4kDataModule"]
@@ -12,7 +13,7 @@ class UnrealStereo4kDataModule(LightningDataModule):
     def __init__(
         self,
         # dataset specific
-        root: Path | str = ".data/unrealstereo4k",
+        root: Path | str = root_data("unrealstereo4k"),
         load_prevs: int | None = 0,
         filter_scans: Callable[[str, str], bool] | None = None,
         stereo_as_prevs: bool = True,
@@ -33,8 +34,16 @@ class UnrealStereo4kDataModule(LightningDataModule):
         self.remove_sky = remove_sky
 
     def prepare_data(self) -> None:
-        # TODO: prepare data download
-        pass
+        root = Path(self.root)
+        root.mkdir(exist_ok=True, parents=True)
+        files = [f.name for f in root.iterdir()]
+        test_scans = [f"{i:0>5}" for i in range(8)]
+        for scan in test_scans:
+            if scan not in files:
+                github_download_unzip_assets(
+                    "andreaconti", "ramdepth", ["139715956"], root
+                )
+                break
 
     def setup(self, stage: str | None = None):
         self._test_ds = UnrealStereo4kDataset(
