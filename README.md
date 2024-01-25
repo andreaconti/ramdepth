@@ -49,10 +49,13 @@ In this repo we provide __evaluation__ code for our paper, it allows to load the
 Dependencies can be installed with `conda` or `mamba` as follows:
 
 ```bash
+$ # first of all clone the repo and build the conda environment
 $ git clone https://github.com/andreaconti/ramdepth.git
 $ cd ramdepth
 $ conda env create -f environment.yml  # use mamba if conda is too slow
 $ conda activate ramdepth
+$ # then, download and install the wheel containing the pretrained models, available for linux, windows and macos
+$ pip install https://github.com/andreaconti/ramdepth/releases/download/wheels%2Fv0.1.0/ramdepth-0.1.0-cp310-cp310-linux_x86_64.whl --no-deps
 ```
 
 Then you can run the [evaluate.ipynb](https://github.com/andreaconti/ramdepth/blob/main/evaluate.ipynb) to select the dataset and pre-trained model you want to test. Results may be slightly different with respect to the results in the main paper due to small differences in dataloaders and framework due to the packaging process.
