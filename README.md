@@ -1,5 +1,11 @@
 <h1 align="center">
 <a href="">Range-Agnostic Multi-View Depth Estimation With Keyframe Selection</a>
+<div style="margin-top: 5px; font-size: 0.5em">aka</div>
+<div style="font-size: 0.8em">
+    <img src="https://github.com/andreaconti/ramdepth/blob/main/media/icon.png" style="vertical-align: middle;" width="40px"/>
+    <span style="vertical-align: middle;">RAMDepth</span>
+    <img src="https://github.com/andreaconti/ramdepth/blob/main/media/icon.png" style="vertical-align: middle;" width="40px"/>
+</div>
 </h1>
 
 <p>
