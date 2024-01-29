@@ -19,7 +19,7 @@
     <a href="http://vision.deis.unibo.it/~smatt/Site/Home.html">Stefano Mattoccia</a>
 </div>
 <div align="center">
-    <a href="https://arxiv.org/pdf/2212.00790.pdf">[Arxiv]</a>
+    <a href="https://arxiv.org/abs/2401.14401">[Arxiv]</a>
     <a href="https://andreaconti.github.io/projects/range_agnostic_multi_view_depth">[Project Page]</a>
 </div>
 </p>
