@@ -1,5 +1,5 @@
 <h1 align="center">
-<a href="">Range-Agnostic Multi-View Depth Estimation With Keyframe Selection</a>
+<a href="https://arxiv.org/pdf/2401.14401.pdf">Range-Agnostic Multi-View Depth Estimation With Keyframe Selection</a>
 <div style="margin-top: 5px; font-size: 0.5em">aka</div>
 <div style="font-size: 0.8em">
     <img src="https://github.com/andreaconti/ramdepth/blob/main/media/icon.png" style="vertical-align: middle;" width="40px"/>
@@ -34,7 +34,7 @@ Multi-View 3D reconstruction techniques process a set of source views and a refe
 In this paper, we propose a novel framework **free from prior knowledge of the scene depth range** and capable of **distinguishing the most meaningful source frames**. The proposed method unlocks the capability to apply multi-view depth estimation to a wider range of scenarios like large-scale outdoor environments, top-view buildings and large-scale outdoor environments.
 
 Our method relies on an **iterative approach**: starting from a zero-initialized depth map we extract geometrical correlation cues and update the prediction. At each iteration we feed also information extracted from the reference view only (the one on which we desire to compute depth). 
-Moreover, at each iteration we use a different source view to exploit multi-view information in a round-robin fashion. For more details please refer to the [paper]().
+Moreover, at each iteration we use a different source view to exploit multi-view information in a round-robin fashion. For more details please refer to the [paper](https://arxiv.org/pdf/2401.14401.pdf).
 
 ## Citation
 
